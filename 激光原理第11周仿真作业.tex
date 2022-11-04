@@ -1,0 +1,107 @@
+\documentclass[utf8]{ctexart} %中文文档类
+\usepackage[a4paper,left=2.50cm, right=2.50cm, top=2.50cm, bottom=2.50cm]{geometry} % 页边距
+\usepackage{indentfirst} % 首行缩进
+\usepackage{fancyhdr} % 设置页眉、页脚
+\renewcommand\headrulewidth{0pt}% 页眉与正文之间的水平线粗细
+\usepackage{ctexcap} % 标题是中文的
+\usepackage{helvet} % 用来指定beamer使用的字体
+\usepackage{hyperref} % bookmarks 
+\usepackage{multicol} % 分栏
+
+\usepackage{amsmath, amsfonts, amssymb} % 数学公式、符号
+\usepackage[english]{babel} % 数学公式标准
+\usepackage{bm} % 加粗方程字体 
+
+\usepackage{graphicx} % 图片 
+\usepackage{url} % 超链接 
+
+\usepackage{multirow} % 表格
+\usepackage{booktabs} % 三线表
+\usepackage{longtable} % 长表格
+
+\usepackage{algorithm} % 算法或伪代码
+\usepackage{algorithmic} % 算法或伪代码
+
+\usepackage{enumitem} % 枚举环境宏包
+\usepackage{listings}
+\usepackage{xcolor}
+\renewcommand{\algorithmicrequire}{ \textbf{Input:}} 
+\renewcommand{\algorithmicensure}{ \textbf{Initialize:}} 
+\renewcommand{\algorithmicreturn}{ \textbf{Output:}} %算法格式
+
+\pagestyle{fancy} \lhead{} \chead{} \lfoot{} \cfoot{} \rfoot{}
+\pagestyle{plain}
+\hypersetup{colorlinks, bookmarks, unicode} % unicode 
+ 
+ \lstset{
+% basicstyle=\footnotesize,                 % 设置整体的字体大小
+showstringspaces=false,                     % 不显示字符串中的空格
+frame=single,                               % 设置代码块边框
+numbers=left,                               % 在左侧显示行号
+% numberstyle=\footnotesize\color{gray},    % 设置行号格式
+numberstyle=\color{darkgray},               % 设置行号格式
+backgroundcolor=\color{white},              % 设置背景颜色
+keywordstyle=\color{blue},                  % 设置关键字颜色
+commentstyle=\it\color[RGB]{0,100,0},       % 设置代码注释的格式
+stringstyle=\sl\color{red},                 % 设置字符串格式
+}
+
+\title{\textbf{激光原理作业}}
+\author{\bf 200212127席思诚}
+\date{\today}
+
+\hypersetup{
+colorlinks=true,
+linkcolor=black
+} % 使目录为黑色字
+\begin{document}  
+		\maketitle
+		
+        \section{问题一的求解}
+        作业2-1：利用 matlab 画出高阶拉盖尔﹣高斯光束和高阶厄米﹣高斯光束。
+        \begin{figure}[htbp]
+            \centering
+            \includegraphics[width=10cm]{a.png}
+            \caption{Caption}
+            \label{fig:my_label}
+        \end{figure}
+        \section{问题二的求解}
+        作业2-2：根据高斯光束特性，利用 matlab 分别画出束腰半径为1mm的高斯光束在束腰处的二维和三维光强分布图。
+        \newpage
+        \section*{附录}
+
+        \begin{lstlisting}[language=matlab]
+        
+    m=0;             % Beam order
+    n=0;                % Beam order
+    count = 0;
+    w0 = 2.0;               % Beam waist
+    k = 2*pi/532.0e-9;      % Wavenumber of light
+
+    zR = k*w0^2/2;      % Calculate the Rayleigh range
+
+    % Setup the cartesian grid for the plot at plane z
+    z = 0.0;
+    [xx, yy] = meshgrid(linspace(-5, 5), linspace(-5, 5));
+
+    U00 = 1/(1 + 1i*z/zR) .* exp(-(xx.^2 + yy.^2)/w0^2./(1 + 1i*z/zR));
+ 
+    for m=0:3
+        for n=0:3
+            count=count+1;
+            Hn = hermiteH(n, xx);
+            Hm = hermiteH(m, yy);
+            U = U00.*Hn.*Hm.*exp(-1i*(n + m).*atan(z/zR));
+            subplot(4,4,count)
+            imagesc(abs(U).^2);
+            title([num2str(n),num2str(m)]);
+        end
+    end
+    
+   
+    
+
+        \end{lstlisting}
+
+
+\end{document}
